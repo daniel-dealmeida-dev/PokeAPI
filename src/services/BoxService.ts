@@ -1,31 +1,64 @@
 import { readFile, writeFile } from 'fs/promises';
 import { PokemonEscolhido } from '../models/Pokemon';
-import { buscaPokemon } from './PokeApiService';
 
-const URL_DATABASE = `pc_boc.json`;
+const URL_DATABASE = 'pc_box.json';
 
 async function lerArquivo(): Promise<PokemonEscolhido[]> {
   try {
     const pokemonText = await readFile(URL_DATABASE, 'utf-8');
     return JSON.parse(pokemonText);
   } catch {
-    console.error('Erro ao ler o arquivo');
     return [];
   }
 }
 
-export async function salvarPokemon(pokemon: PokemonEscolhido): Promise<void> {
+export async function exibirPCBox(): Promise<void> {
   const pokemons = await lerArquivo();
 
-  if (!pokemons) {
-    await writeFile(URL_DATABASE, JSON.stringify([pokemon]), {
-      encoding: 'utf-8',
-    });
+  if (pokemons.length === 0) {
+    console.log('PC Box vazio.');
+    return;
   }
 
+  pokemons.forEach((pokemon) => {
+    const [hp, atk, def, spAtk, spDef, speed] = pokemon.pokemonStats;
+
+    console.log(`
+---------------------
+${pokemon.pokemonName}
+#${pokemon.pokemonId}
+
+Tipo: ${pokemon.pokemonType}
+
+HP: ${hp}
+ATK: ${atk}
+DEF: ${def}
+SP.ATK: ${spAtk}
+SP.DEF: ${spDef}
+SPEED: ${speed}
+-------------------
+`);
+  });
+}
+
+export async function salvarPokemon(
+  pokemon: PokemonEscolhido,
+): Promise<void> {
+  const pokemons = await lerArquivo();
+
   const pokemonExistente = pokemons.find(
-    (pokemonSalvo) => pokemonSalvo.getPokemonId === pokemon.getPokemonId,
+    (pokemonSalvo) => pokemonSalvo.pokemonId === pokemon.pokemonId,
   );
 
-  
+  if (pokemonExistente) {
+    throw new Error('Pokémon já cadastrado.');
+  }
+
+  pokemons.push(pokemon);
+
+  await writeFile(
+    URL_DATABASE,
+    JSON.stringify(pokemons, null, 2),
+    'utf-8',
+  );
 }
