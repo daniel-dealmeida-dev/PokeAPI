@@ -9,7 +9,7 @@ export async function buscaPokemon(url: string): Promise<PokemonEscolhido> {
     switch (response.status) {
       case 200:
         
-        // TODO:return .validate(await response.json());
+        
       case 404:
         throw new Error('Pokémon não encontrado');
       case 400:
