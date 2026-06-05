@@ -1,22 +1,29 @@
-export class PokemonEscolhido {
-  constructor(
-    public pokemonType: string,
-    public pokemonName: string | null,
-    public pokemonId: number,
-    public pokemonStats: number[],
-  ) {}
-  get getPokemonType(): string {
-    return this.pokemonType;
-  }
+export interface PokemonResumo {
+  id: number;
+  nome: string;
+  tipos: string[];
+  altura: number;
+  peso: number;
 
-  get getPokemonName(): string | null {
-    return this.pokemonName;
-  }
+  
+  stats?: {
+    hp: number;
+    attack: number;
+    defense: number;
+    spAttack: number;
+    spDefense: number;
+    speed: number;
+  };
+}
 
-  get getPokemonId(): number {
-    return this.pokemonId;
-  }
-  get getPokemonStats(): number[] {
-    return this.pokemonStats;
-  }
+export interface PokemonApiResponse {
+  id: number;
+  name: string;
+  height: number;
+  weight: number;
+  types: {
+    type: {
+      name: string;
+    };
+  }[];
 }

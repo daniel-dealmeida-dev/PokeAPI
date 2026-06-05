@@ -1,12 +1,15 @@
 import { readFile, writeFile } from 'fs/promises';
-import { PokemonEscolhido } from '../models/Pokemon';
+import { PokemonResumo } from '../models/Pokemon';
 
 const URL_DATABASE = 'pc_box.json';
 
-async function lerArquivo(): Promise<PokemonEscolhido[]> {
+async function lerArquivo(): Promise<PokemonResumo[]> {
   try {
     const pokemonText = await readFile(URL_DATABASE, 'utf-8');
-    return JSON.parse(pokemonText);
+
+    if (!pokemonText.trim()) return [];
+
+    return JSON.parse(pokemonText) as PokemonResumo[];
   } catch {
     return [];
   }
@@ -21,20 +24,22 @@ export async function exibirPCBox(): Promise<void> {
   }
 
   pokemons.forEach((pokemon) => {
-    const [hp, atk, def, spAtk, spDef, speed] = pokemon.pokemonStats;
+    if (!pokemon.stats || !pokemon.tipos) return;
+
+    const { hp, attack, defense, spAttack, spDefense, speed } = pokemon.stats;
 
     console.log(`
 ---------------------
-${pokemon.pokemonName}
-#${pokemon.pokemonId}
+${pokemon.nome}
+#${pokemon.id}
 
-Tipo: ${pokemon.pokemonType}
+Tipo: ${pokemon.tipos.join(", ")}
 
 HP: ${hp}
-ATK: ${atk}
-DEF: ${def}
-SP.ATK: ${spAtk}
-SP.DEF: ${spDef}
+ATK: ${attack}
+DEF: ${defense}
+SP.ATK: ${spAttack}
+SP.DEF: ${spDefense}
 SPEED: ${speed}
 -------------------
 `);
@@ -42,12 +47,12 @@ SPEED: ${speed}
 }
 
 export async function salvarPokemon(
-  pokemon: PokemonEscolhido,
+  pokemon: PokemonResumo,
 ): Promise<void> {
   const pokemons = await lerArquivo();
 
   const pokemonExistente = pokemons.find(
-    (pokemonSalvo) => pokemonSalvo.pokemonId === pokemon.pokemonId,
+    (pokemonSalvo) => pokemonSalvo.id === pokemon.id,
   );
 
   if (pokemonExistente) {

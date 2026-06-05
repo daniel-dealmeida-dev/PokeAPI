@@ -1,1 +1,15 @@
-[]
+[
+  {
+    "pokemonType": "electric",
+    "pokemonName": "pikachu",
+    "pokemonId": 25,
+    "pokemonStats": [
+      35,
+      55,
+      40,
+      50,
+      50,
+      90
+    ]
+  }
+]

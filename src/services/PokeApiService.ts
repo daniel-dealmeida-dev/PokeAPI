@@ -1,26 +1,27 @@
-import { PokemonEscolhido } from "../models/Pokemon";
+import { PokemonResumo, PokemonApiResponse } from "../models/Pokemon";
 
-
-export async function buscaPokemon(url: string): Promise<PokemonEscolhido> {
-  const PokemonEscolhido = 'https://pokeapi.co/api/v2/pokemon/${pokemonName}';
-
+export async function buscarPokemon(nomeOuId: string): Promise<PokemonResumo | null> {
   try {
-    const response = await fetch(`${url}`);
-    switch (response.status) {
-      case 200:
-        
-        
-      case 404:
-        throw new Error('Pokémon não encontrado');
-      case 400:
-        throw new Error('Requisição inválida');
-      default:
-        throw new Error('Erro desconhecido');
+    const url = `https://pokeapi.co/api/v2/pokemon/${nomeOuId.toLowerCase()}`;
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      console.log("[ERRO] Pokémon não encontrado");
+      return null;
     }
-  } catch (error) {
-    if (!(error instanceof TypeError)) {
-      throw new Error('Falha de conexão com a API');
-    }
-    throw Error;
+
+    const data: PokemonApiResponse = await response.json() as PokemonApiResponse ;
+
+    return {
+      id: data.id,
+      nome: data.name,
+      tipos: data.types.map(t => t.type.name),
+      altura: data.height,
+      peso: data.weight,
+    };
+
+  } catch {
+    console.log("[ERRO] Falha na API");
+    return null;
   }
 }
