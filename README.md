@@ -209,15 +209,6 @@ Branches utilizadas:
 * feat/pokedex
 * docs/readme
 
-Exemplos de commits:
-
-```text
-feat: implementa integração com a pokeapi
-feat: cria sistema de catálogo local
-feat: adiciona persistência em json
-fix: corrige validação de duplicidade
-docs: atualiza readme
-```
 ## Autor
 
 Daniel de Almeida
