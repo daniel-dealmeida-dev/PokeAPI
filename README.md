@@ -157,11 +157,6 @@ Saída:
 
 ## Conceitos Aplicados
 
-### Interfaces
-
-* PokemonResumo
-* PokemonApiResponse
-
 Utilizadas para garantir tipagem dos dados recebidos da API e armazenados no sistema.
 
 ### Programação Orientada a Objetos
