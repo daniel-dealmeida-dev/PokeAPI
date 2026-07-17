@@ -1,4 +1,4 @@
-# Mini-Projeto SCTEC Pokédex
+# PokeAPI
 
 Aplicação desenvolvida em Node.js e TypeScript para consulta de Pokémon através da PokeAPI e gerenciamento de um catálogo local persistido em arquivo JSON.
 
